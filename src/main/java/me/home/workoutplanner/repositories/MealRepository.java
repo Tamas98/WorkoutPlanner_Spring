@@ -2,11 +2,13 @@ package me.home.workoutplanner.repositories;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import me.home.workoutplanner.model.Meal;
 
-public interface MealRepository extends JpaRepository<Meal, Long>{
+@RepositoryRestResource
+public interface MealRepository extends CrudRepository<Meal, Long>{
 	
 	List<Meal> findAllByType(String type);
 }
