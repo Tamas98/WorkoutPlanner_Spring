@@ -1,8 +1,7 @@
 package me.home.workoutplanner.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import me.home.workoutplanner.model.Meal;
@@ -13,9 +12,7 @@ public class IndexController {
 
 	@Autowired
 	private MealRepository repository;
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/meals")
+	@RequestMapping("/meals")
 	public Iterable<Meal> getMeals() {
 		return repository.findAll();
 	}

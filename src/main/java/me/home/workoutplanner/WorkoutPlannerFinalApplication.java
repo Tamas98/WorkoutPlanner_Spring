@@ -27,6 +27,13 @@ import me.home.workoutplanner.repositories.DayRepository;
 import me.home.workoutplanner.repositories.ExerciseRepository;
 import me.home.workoutplanner.repositories.MealRepository;
 
+import me.home.workoutplanner.model.Day;
+import me.home.workoutplanner.model.Exercise;
+import me.home.workoutplanner.model.Meal;
+import me.home.workoutplanner.repositories.DayRepository;
+import me.home.workoutplanner.repositories.ExerciseRepository;
+import me.home.workoutplanner.repositories.MealRepository;
+
 @ComponentScan
 @SpringBootApplication
 public class WorkoutPlannerFinalApplication extends SpringBootServletInitializer{
@@ -61,7 +68,7 @@ public class WorkoutPlannerFinalApplication extends SpringBootServletInitializer
 	    source.registerCorsConfiguration("/**", config);
 	    return new CorsFilter(source);
 	}
-	
+
 	 @Bean
 	 CommandLineRunner runner(){
 		 return args -> {
