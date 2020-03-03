@@ -11,8 +11,6 @@ import me.home.workoutplanner.model.Meal;
 @RepositoryRestResource
 public interface MealRepository extends CrudRepository<Meal, Long>{
 	
-	List<Meal> findAllByType(String type);
+	List<Meal> findAllByTypeOrderByType(String type);
 	
-	@Query("Select disctinct type(m.type) from Meals m order by type(m.type)")
-	List<String> getTypes();
 }

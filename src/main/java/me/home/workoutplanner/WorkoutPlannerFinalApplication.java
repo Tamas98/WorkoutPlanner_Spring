@@ -74,6 +74,8 @@ public class WorkoutPlannerFinalApplication extends SpringBootServletInitializer
 		 return args -> {
 			 Meal meal = new Meal("test","chicken",0,0,0,0,0,0,100);
 			 mealRepo.save(meal);
+			 mealRepo.save(new Meal("tes2t","chicken",0,0,0,0,0,0,100));
+			 mealRepo.save(new Meal("test3","pork",0,0,0,0,0,0,100));
 			 Exercise exec = new Exercise("test2","medium",20,10,"bicessz");
 			 exerciseRepo.save(exec);
 			 Map<Exercise,Integer> exercises = new HashMap<>();
