@@ -12,6 +12,7 @@ public class IndexController {
 
 	@Autowired
 	private MealRepository repository;
+	
 	@RequestMapping("/meals")
 	public Iterable<Meal> getMeals() {
 		return repository.findAll();
