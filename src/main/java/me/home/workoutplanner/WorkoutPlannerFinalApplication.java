@@ -72,18 +72,17 @@ public class WorkoutPlannerFinalApplication extends SpringBootServletInitializer
 	 @Bean
 	 CommandLineRunner runner(){
 		 return args -> {
-			 Meal meal = new Meal("test","chicken",0,0,0,0,0,0,100);
+			 Meal meal = new Meal("test","chicken",0,100,0,0,0,0);
 			 mealRepo.save(meal);
-			 mealRepo.save(new Meal("tes2t","chicken",0,0,0,0,0,0,100));
-			 mealRepo.save(new Meal("test3","pork",0,0,0,0,0,0,100));
+			 mealRepo.save(new Meal("tes2t","chicken",20,0,0,0,0,0));
+			 mealRepo.save(new Meal("test3","pork",0,0,30,0,0,0));
 			 Exercise exec = new Exercise("test2","medium",20,10,"bicessz");
 			 exerciseRepo.save(exec);
 			 Map<Exercise,Integer> exercises = new HashMap<>();
 			 exercises.put(exec, 20);
 			 Map<Meal,Double> meals= new HashMap<>();
 			 meals.put(meal,20.2);
-			 Day day = new Day(LocalDate.now(),exercises,meals);
-			 dayRepo.save(day);
+		
 		 };
 	 }
 

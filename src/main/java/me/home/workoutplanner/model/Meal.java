@@ -2,6 +2,7 @@ package me.home.workoutplanner.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,8 +34,7 @@ public class Meal {
 
 	private double eaten;
 	
-	@ManyToMany
-	private List<Day> days;
+//	private List<Day> days;
 
 	public long getId() {
 		return id;
@@ -148,5 +148,27 @@ public class Meal {
 		this.sugar = sugar;
 		this.carbos = carbos;
 		this.eaten = eaten;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Meal other = (Meal) obj;
+		if (id != other.id)
+			return false;
+		return true;
 	}
 }

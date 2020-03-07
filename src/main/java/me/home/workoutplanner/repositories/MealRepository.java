@@ -10,4 +10,6 @@ public interface MealRepository extends CrudRepository<Meal, Long>{
 	
 	Meal findById(int id);
 	
+	void deleteById(long id);
+	
 }
