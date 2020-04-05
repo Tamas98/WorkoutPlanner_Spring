@@ -1,9 +1,6 @@
 package me.home.workoutplanner.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.persistence.CollectionTable;
@@ -34,7 +31,7 @@ public class Day {
 	
 	private double result;
 	
-	@ElementCollection()
+	@ElementCollection
 	@JsonIgnore
 	@CollectionTable(name="meals_eaten")
 	@MapKeyColumn(name="day_id")
@@ -45,6 +42,15 @@ public class Day {
 	@CollectionTable(name="exercises_done")
 	@MapKeyColumn(name="day_id")
 	private Map<Exercise,Double> repsDone;
+	
+	public Day(LocalDate date, Map<Exercise,Double> exercises,Map<Meal,Double> meals) {
+		this.date = date;
+		this.repsDone = exercises;
+		this.meals = meals;
+	}
+	
+	public Day() {
+	}
 
 
 	public long getId() {
@@ -87,71 +93,7 @@ public class Day {
 	public void setResult(double result) {
 		this.result = result;
 	}
-
-	@Override
-	public String toString() {
-		return "Day [id=" + id + ", date=" + date + ", inTake=" + inTake + ", burn=" + burn + ", result=" + result
-				+ "]";
-	}
-
-	public Day(LocalDate date, Map<Exercise,Double> exercises,Map<Meal,Double> meals) {
-		System.out.println("Day Constructor called:");
-		System.out.println(exercises.toString());
-		System.out.println(meals.toString());
-		this.date = date;
-		this.repsDone = exercises;
-		this.meals = meals;
-		this.inTake = 0;//calculateInTake(meals);
-		this.burn = 0; //calculateBurn(exercises);
-		this.result = this.inTake-this.burn;
-	}
 	
-	public Day() {
-		System.out.println("Default constructor called");
-	}
-	
-	private double calculateBurn(Map<Exercise,Double> exercises) {
-		
-		ArrayList<Double> burned = new ArrayList<>();
-		
-		exercises.forEach((exercise,done) -> burned.add(exercise.getBurn()*done));
-		
-		double sum = 0;
-		
-		for(double b:burned) {
-			sum += b;
-		}
-		
-		return sum;
-	}
-
-	/*public Day(LocalDate date, double inTake, double burn, List<Meal> meals,
-			List<Exercise> exercises) {
-		this.date = date;
-		this.inTake = inTake;
-		this.burn = burn;
-		this.meals = meals;
-		this.exercises = exercises;
-	}*/
-	
-	private double calculateInTake(Map<Meal,Double> meals) {
-		
-		System.out.println("CalculateIntake called");
-		System.out.println(this.meals.toString());
-		
-		ArrayList<Double> eat = new ArrayList<>();
-		
-		meals.forEach((meal,eaten) -> eat.add(meal.getCalories()*eaten));
-		
-		double sum = 0;
-		
-		for(double d:eat) {
-			sum += d;
-		}
-		
-		return sum;
-	}
-
 	public Map<Meal, Double> getMeals() {
 		return this.meals;
 	}
@@ -163,4 +105,11 @@ public class Day {
 	public void setRepsDone(Map<Exercise, Double> repsDone) {
 		this.repsDone = repsDone;
 	}
+
+	@Override
+	public String toString() {
+		return "Day [id=" + id + ", date=" + date + ", inTake=" + inTake + ", burn=" + burn + ", result=" + result
+				+ "]";
+	}
+
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class GetExerciseData {
+	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate date;
 

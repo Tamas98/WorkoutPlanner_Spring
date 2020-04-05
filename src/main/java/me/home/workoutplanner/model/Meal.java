@@ -1,13 +1,9 @@
 package me.home.workoutplanner.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Meal {
@@ -34,7 +30,33 @@ public class Meal {
 
 	private double eaten;
 	
-//	private List<Day> days;
+	public Meal() {
+	}
+
+	public Meal(String name, String type, double calories, double fat, double salt, double protein, double sugar,
+			double carbos) {
+		this.name = name;
+		this.type = type;
+		this.calories = calories;
+		this.fat = fat;
+		this.salt = salt;
+		this.protein = protein;
+		this.sugar = sugar;
+		this.carbos = carbos;
+	}
+	
+	public Meal(String name, String type, double calories, double fat, double salt, double protein, double sugar,
+			double carbos, double eaten) {
+		this.name = name;
+		this.type = type;
+		this.calories = calories;
+		this.fat = fat;
+		this.salt = salt;
+		this.protein = protein;
+		this.sugar = sugar;
+		this.carbos = carbos;
+		this.eaten = eaten;
+	}
 
 	public long getId() {
 		return id;
@@ -107,20 +129,6 @@ public class Meal {
 	public void setType(String type) {
 		this.type = type;
 	}
-	
-	public Meal() {}
-
-	public Meal(String name, String type, double calories, double fat, double salt, double protein, double sugar,
-			double carbos) {
-		this.name = name;
-		this.type = type;
-		this.calories = calories;
-		this.fat = fat;
-		this.salt = salt;
-		this.protein = protein;
-		this.sugar = sugar;
-		this.carbos = carbos;
-	}
 
 	public double getEaten() {
 		return eaten;
@@ -135,19 +143,6 @@ public class Meal {
 		return "Meal [id=" + id + ", name=" + name + ", type=" + type + ", calories=" + calories + ", fat=" + fat
 				+ ", salt=" + salt + ", protein=" + protein + ", sugar=" + sugar + ", carbos=" + carbos + ", eaten="
 				+ eaten + "]";
-	}
-
-	public Meal(String name, String type, double calories, double fat, double salt, double protein, double sugar,
-			double carbos, double eaten) {
-		this.name = name;
-		this.type = type;
-		this.calories = calories;
-		this.fat = fat;
-		this.salt = salt;
-		this.protein = protein;
-		this.sugar = sugar;
-		this.carbos = carbos;
-		this.eaten = eaten;
 	}
 
 	@Override

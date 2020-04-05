@@ -1,13 +1,9 @@
 package me.home.workoutplanner.model;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 
 @Entity
 public class Exercise {
@@ -26,7 +22,23 @@ public class Exercise {
 	
 	private String type;
 	
-//	private List<Day> days;
+	public Exercise() {}
+
+	public Exercise(String name, String difficulty, double burn, String type) {
+		this.name = name;
+		this.difficulty = difficulty;
+		this.burn = burn;
+		this.type = type;
+	}
+	
+	public Exercise(String name, String difficulty, double burn, int reps, String type) {
+		this.name = name;
+		this.difficulty = difficulty;
+		this.burn = burn;
+		this.reps = reps;
+		this.type = type;
+	}
+
 
 	public long getId() {
 		return id;
@@ -81,24 +93,7 @@ public class Exercise {
 		return "Exercise [id=" + id + ", name=" + name + ", difficulty=" + difficulty + ", burn=" + burn + ", reps="
 				+ reps + ", type=" + type + "]";
 	}
-
-	public Exercise(String name, String difficulty, double burn, String type) {
-		this.name = name;
-		this.difficulty = difficulty;
-		this.burn = burn;
-		this.type = type;
-	}
 	
-	public Exercise() {}
-
-	public Exercise(String name, String difficulty, double burn, int reps, String type) {
-		this.name = name;
-		this.difficulty = difficulty;
-		this.burn = burn;
-		this.reps = reps;
-		this.type = type;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
