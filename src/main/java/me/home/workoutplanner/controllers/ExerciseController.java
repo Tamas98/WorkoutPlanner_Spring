@@ -3,8 +3,10 @@ package me.home.workoutplanner.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,19 +24,25 @@ public class ExerciseController implements MealAndExerciseControllerInterface<Ex
 	
 	@Override
 	@RequestMapping("/exercises")
-	public Iterable<Exercise> getAllFromDatabase() {
-		return repository.findAll();
+	public ResponseEntity getAllFromDatabase() {
+		Iterable<Exercise> exercisesInDatabase = repository.findAll();
+		logger.info("All exercise queried");
+		return ResponseEntity.ok(exercisesInDatabase);
 	}
 
 	@Override
 	@RequestMapping(path = "/exercises",method = RequestMethod.POST )
 	@ResponseBody
-	public Exercise addNewInstanceToDatabase(@RequestParam("exercise") Exercise exercise) {
+	public ResponseEntity addNewInstanceToDatabase(@RequestBody Exercise exercise) {
 		List<Exercise> exercises = (List<Exercise>) repository.findAll();
+		
 		if(exercises.contains(exercise)) {
-			return new Exercise();
+			logger.info("User tried to add already  existing meal: " + exercise.toString());
+			return ResponseEntity.status(409).build();
 		}
+		
 		repository.save(exercise);
-		return exercise;
+		logger.info("New exercise: " + exercise.toString() + " successfully added to databese");
+		return ResponseEntity.ok().build();
 	}
 }

@@ -5,11 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import me.home.workoutplanner.model.Day;
 import me.home.workoutplanner.model.Exercise;
@@ -20,10 +24,13 @@ import me.home.workoutplanner.repositories.DayRepository;
 import me.home.workoutplanner.repositories.ExerciseRepository;
 import me.home.workoutplanner.repositories.MealRepository;
 
+@RestController
 public class AddToDatabaseController {
+	
+	private final Logger logger = LogManager.getLogger(AddToDatabaseController.class);
 
 	@Autowired
-	private DayRepository repository;
+	private DayRepository dayRepository;
 
 	@Autowired
 	private MealRepository mealRepository;
@@ -33,17 +40,19 @@ public class AddToDatabaseController {
 
 	@RequestMapping(value = "/days/mealAdd", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public String addMealToDate(@RequestBody GetMealData day) {
+	public ResponseEntity addMealToDate(@RequestBody GetMealData day) {
 
-		Optional<Day> findByDate = repository.findByDate(day.getDate());
+		Optional<Day> findByDate = dayRepository.findByDate(day.getDate());
 		Meal mealToAdd = mealRepository.findById(day.getId()).get();
 		
 		if (checkExistance(findByDate)) {
 			modifyMealsOnDate(mealToAdd,findByDate.get(),day.getEaten());
-			return "Succesfully Modified";
+			logger.info("Successfully modified day: " + day.getDate());
+			return ResponseEntity.ok().body("Modified");
 		} else {
 			addNewDayToDatabaseWithMeal(mealToAdd,day.getEaten(),day.getDate());
-			return "Successfully created new Day";
+			logger.info("Successfully created day: " + day.getDate() + " data with meal");
+			return ResponseEntity.ok().body("New");
 		}
 	}
 	
@@ -52,7 +61,7 @@ public class AddToDatabaseController {
 		meals.put(mealToAdd, eatenAmount);
 		Day newDay = new Day(dateOfConsumption, new HashMap<Exercise, Double>(), meals);
 		newDay.setInTake((mealToAdd.getCalories() / 100) * eatenAmount);
-		repository.save(newDay);
+		dayRepository.save(newDay);
 	}
 	
 	private void modifyMealsOnDate(Meal mealToAdd,Day dateOfConsumption, double eatenAmount) {
@@ -60,27 +69,31 @@ public class AddToDatabaseController {
 		
 		if (selectedDay.getMeals().containsKey(mealToAdd)) {
 			selectedDay.getMeals().put(mealToAdd, eatenAmount + selectedDay.getMeals().get(mealToAdd));
+			logger.info("Meal modified: " + mealToAdd.toString());
 		} else {
 			selectedDay.getMeals().put(mealToAdd, eatenAmount);
+			logger.info("new food added to daily meals: " + mealToAdd.toString());
 		}
 		
 		selectedDay.setInTake((mealToAdd.getCalories() / 100) * eatenAmount);
-		repository.save(selectedDay);
+		dayRepository.save(selectedDay);
 	}
 
 	@RequestMapping(value = "/days/exerciseAdd", method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	public String addExerciseToDate(@RequestBody GetExerciseData day) {
+	public ResponseEntity addExerciseToDate(@RequestBody GetExerciseData day) {
 
-		Optional<Day> findByDate = repository.findByDate(day.getDate());
+		Optional<Day> findByDate = dayRepository.findByDate(day.getDate());
 		Exercise exerciseDone = exerciseRepository.findById(day.getId()).get();
 
 		if (checkExistance(findByDate)) {
 			modifyExercisesOnDate(exerciseDone,findByDate.get(),day.getReps());
-			return "Succesfully Modified";
+			logger.info("Successfully modified day: " + day.getDate());
+			return ResponseEntity.ok().body("Modified");
 		} else {
 			addNewDayToDatabaseWithExercise(exerciseDone, day.getReps(), day.getDate());
-			return "Successfully created new Day";
+			logger.info("Successfully created day: " + day.getDate() + " data with exercise");
+			return ResponseEntity.ok().body("New");
 		}
 	}
 
@@ -89,14 +102,24 @@ public class AddToDatabaseController {
 		exercises.put(exerciseDone, repNum);
 		Day newDay = new Day(dateOfTheExercise, exercises, new HashMap<Meal, Double>());
 		newDay.setBurn(exerciseDone.getBurn() * repNum);
-		repository.save(newDay);
+		dayRepository.save(newDay);
+		logger.info("Successfully saved Day to database: " + newDay);
 	}
 
 	private void modifyExercisesOnDate(Exercise exerciseDone, Day dateOfExercise, double numberOfReps) {
-		Day selectedDay = dateOfExercise;
-		selectedDay.getRepsDone().put(exerciseDone, numberOfReps);
-		selectedDay.setBurn(exerciseDone.getBurn() * numberOfReps);
-		repository.save(selectedDay);
+		Day modifiedDay = dateOfExercise;
+		
+		if(modifiedDay.getRepsDone().containsKey(exerciseDone)) {
+			double alreadyDoneReps = modifiedDay.getRepsDone().get(exerciseDone);
+			modifiedDay.getRepsDone().put(exerciseDone, alreadyDoneReps+numberOfReps);
+			logger.info("Exercise modified " + exerciseDone.toString());
+		}else {
+			modifiedDay.getRepsDone().put(exerciseDone, numberOfReps);
+			logger.info("Exercise added " + exerciseDone.toString());
+		}
+		
+		modifiedDay.setBurn(exerciseDone.getBurn()*numberOfReps);
+		dayRepository.save(modifiedDay);
 		
 	}
 	

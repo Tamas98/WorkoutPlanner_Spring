@@ -1,9 +1,15 @@
 package me.home.workoutplanner.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.ResponseEntity;
+
 public interface MealAndExerciseControllerInterface<T> {
 	
-	Iterable<T> getAllFromDatabase();
+	static Logger logger = LogManager.getLogger(MealAndExerciseControllerInterface.class);
 	
-	T addNewInstanceToDatabase(T instanceToAdd);
+	ResponseEntity getAllFromDatabase();
+	
+	ResponseEntity addNewInstanceToDatabase(T instanceToAdd);
 	
 }

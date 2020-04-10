@@ -49,6 +49,11 @@ public class Day {
 		this.meals = meals;
 	}
 	
+	public Day(LocalDate date,double result) {
+		this.date = date;
+		this.result = result;
+	}
+	
 	public Day() {
 	}
 
@@ -96,6 +101,10 @@ public class Day {
 	
 	public Map<Meal, Double> getMeals() {
 		return this.meals;
+	}
+	
+	public void setMeals(Map<Meal, Double> meals) {
+		this.meals = meals;
 	}
 
 	public Map<Exercise, Double> getRepsDone() {
