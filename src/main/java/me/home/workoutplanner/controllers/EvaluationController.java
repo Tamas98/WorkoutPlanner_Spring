@@ -143,11 +143,9 @@ public class EvaluationController {
 	@ResponseBody
 	public ResponseEntity getMonthDataForLineChart(@RequestParam("month") int monthAsInt) {
 		List<Day> allDay = convertFromIterableToList(repository.findAllDayFromMonth(monthAsInt));
-		
 		logger.info("Queried all day from month: " + monthAsInt);
 		
-		allDay.sort((day1,day2) -> compareDays(day1.getDate(),day2.getDate()));
-				
+		allDay.sort((day1,day2) -> compareDays(day1.getDate(),day2.getDate()));	
 		List<Day> dataForAllDayInMonth = createDataForAllDayInMonth(allDay,monthAsInt);
 		
 		return ResponseEntity.ok(dataForAllDayInMonth);
